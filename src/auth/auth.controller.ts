@@ -4,8 +4,8 @@ import {
   Controller,
   Post,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
+  // UsePipes,
+  // ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 // import { JwtStrategy } from './strategies/jwt.strategy';
@@ -31,7 +31,7 @@ interface JwtPayload {
 
 @Controller('auth')
 @ApiTags('Authentication')
-@UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+// @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 export class AuthController {
   constructor(private authService: AuthService) {}
 

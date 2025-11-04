@@ -7,6 +7,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { jwtConstants } from '../../config/config.jwt';
+import { Role } from 'src/common/enums/roles.enum';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
@@ -24,7 +25,9 @@ export class JwtRefreshStrategy extends PassportStrategy(
   async validate(req: Request, payload: any) {
     const refreshToken = req.get('Authorization')?.replace('Bearer', '').trim();
     if (!refreshToken) throw new UnauthorizedException('Refresh token missing');
+    console.log(payload);
+    const roles: Role[] = payload.roles || [Role.USER];
 
-    return { userId: payload.sub, email: payload.email, refreshToken };
+    return { userId: payload.sub, email: payload.email, refreshToken, roles };
   }
 }

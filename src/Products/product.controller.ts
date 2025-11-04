@@ -7,8 +7,6 @@ import {
   Body,
   Param,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 
 import type { Request } from 'express';
@@ -18,6 +16,9 @@ import { UpdateProductDto } from './dtos/updateProductDto';
 import { ProductService } from './product.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { Role } from 'src/common/enums/roles.enum';
 // interface AuthRequest extends Request {
 //   user: { userId: string; email: string };
 // }
@@ -30,12 +31,12 @@ interface JwtPayload {
 @ApiTags('Products')
 @ApiBearerAuth('access-token')
 @Controller('products')
-@UseGuards(AuthGuard('jwt'))
-@UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class ProductController {
   constructor(private productService: ProductService) {}
 
   @Post()
+  @Roles(Role.ADMIN)
   create(@Body() dto: createProductDto, @GetUser() user: JwtPayload) {
     return this.productService.addProduct(dto, user.userId);
   }
