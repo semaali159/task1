@@ -24,18 +24,13 @@ export class AuthService {
       dto.email,
       dto.password,
       dto.name,
+      dto?.tenantId,
     );
-    const roles = this.getUserRoles(user);
-    const tokens = await this.generateTokens(
-      user._id.toString(),
-      user.email,
-      roles,
-    );
-    await this.usersService.updateRefreshToken(
-      user._id.toString(),
-      tokens.refreshToken,
-    );
-    return tokens;
+
+    return {
+      message: 'User created successfully, please login',
+      userID: user._id,
+    };
   }
 
   async login(dto: LoginDto) {
@@ -54,6 +49,7 @@ export class AuthService {
       user._id.toString(),
       user.email,
       roles,
+      user.tenantId,
     );
     await this.usersService.updateRefreshToken(
       user._id.toString(),
@@ -80,6 +76,7 @@ export class AuthService {
       user._id.toString(),
       user.email,
       roles,
+      user.tenantId,
     );
     await this.usersService.updateRefreshToken(
       user._id.toString(),
@@ -88,17 +85,22 @@ export class AuthService {
     return tokens.accessToken;
   }
 
-  private async generateTokens(userId: string, email: string, roles: Role[]) {
+  private async generateTokens(
+    userId: string,
+    email: string,
+    roles: Role[],
+    tenantId: string,
+  ) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
-        { sub: userId, email, roles },
+        { sub: userId, email, roles, tenantId },
         {
           secret: jwtConstants.accessSecret,
           expiresIn: jwtConstants.accessExpiresIn,
         },
       ),
       this.jwtService.signAsync(
-        { sub: userId, email, roles },
+        { sub: userId, email, roles, tenantId },
         {
           secret: jwtConstants.refreshSecret,
           expiresIn: jwtConstants.refreshExpiresIn,

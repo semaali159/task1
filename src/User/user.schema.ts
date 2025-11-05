@@ -14,6 +14,8 @@ export class User {
   refreshToken?: string;
   @Prop({ type: [String], enum: Role, default: [Role.USER] })
   roles: Role[];
+  @Prop({ index: true })
+  tenantId: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -28,6 +28,12 @@ export class JwtRefreshStrategy extends PassportStrategy(
     console.log(payload);
     const roles: Role[] = payload.roles || [Role.USER];
 
-    return { userId: payload.sub, email: payload.email, refreshToken, roles };
+    return {
+      userId: payload.sub,
+      email: payload.email,
+      refreshToken,
+      roles,
+      tenantId: payload.tenantId,
+    };
   }
 }

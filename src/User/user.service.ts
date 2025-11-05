@@ -8,9 +8,19 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async create(email: string, password: string, name: string) {
+  async create(
+    email: string,
+    password: string,
+    name: string,
+    tenantId?: string,
+  ) {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new this.userModel({ email, password: hashedPassword, name });
+    const user = new this.userModel({
+      email,
+      password: hashedPassword,
+      name,
+      tenantId,
+    });
     return user.save();
   }
 

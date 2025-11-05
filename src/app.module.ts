@@ -9,12 +9,14 @@ import config from './config/config';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './Products/product.module';
 import { UsersModule } from './User/user.module';
+import { TenantModule } from './tenants/tenant.module';
 
 @Module({
   imports: [
     AuthModule,
     ProductsModule,
     UsersModule,
+    TenantModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [config],

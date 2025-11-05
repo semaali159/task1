@@ -1,6 +1,7 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Length,
   MaxLength,
@@ -22,4 +23,7 @@ export class RegisterDto {
   @MinLength(6)
   @IsNotEmpty()
   password: string;
+  @IsString()
+  @IsOptional()
+  tenantId: string; //In real application we got it from company domain
 }
